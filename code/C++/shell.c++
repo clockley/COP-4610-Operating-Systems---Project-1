@@ -53,11 +53,11 @@ int main() {
 				word.push_back(input[i]);
 			}
 		}
-		command.push_back(NULL);
+
 		if (commandToNumber(command[0]) == CD) {
 			std::cout << "Changing directory to " << command[1] << "\n";
 			chdir(command.at(1));
-			for (int i = 0; i < command.size()-1; ++i) {
+			for (int i = 0; i < command.size(); ++i) {
 				free((void*)command.at(i));
 			}
 			command.clear();
@@ -65,6 +65,7 @@ int main() {
 		}
 		pid_t cp = fork();
 		if (cp == 0) {
+			command.push_back(NULL);
 			switch (commandToNumber(command[0])) {
 				case DIR:
 					command[0] = "ls";
@@ -95,7 +96,7 @@ int main() {
 			abort();
 		} else {
 			int x = 0;
-			for (int i = 0; i < command.size()-1; ++i) {
+			for (int i = 0; i < command.size(); ++i) {
 				free((void*)command.at(i));
 			}
 			waitpid(cp, &x, 0);
