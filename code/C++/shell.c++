@@ -4,7 +4,7 @@ School:University of North Florida Spring 2020
 Class:COP 4610 – Operating Systems
 Professor:Dr. Sanjay Ahuja
 */
-
+#define _GNU_SOURCE
 #include <iostream>
 #include <sstream>
 #include <queue>
@@ -55,8 +55,16 @@ int main() {
 		}
 
 		if (commandToNumber(command[0]) == CD) {
-			std::cout << "Changing directory to " << command[1] << "\n";
-			chdir(command.at(1));
+			if (command.size() > 1) {
+				std::cout << "Changing directory to " << command[1] << "\n";
+				chdir(command.at(1));
+			} else {
+				char * tmp;
+				std::cout << "Current directory: " << (tmp = get_current_dir_name()) << "\n";
+				free(tmp);
+				command.clear();
+				continue;
+			}
 			for (int i = 0; i < command.size(); ++i) {
 				free((void*)command.at(i));
 			}
